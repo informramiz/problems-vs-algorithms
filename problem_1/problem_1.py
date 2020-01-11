@@ -4,7 +4,6 @@ Created on: 11/01/2020
 Problem:
 """
 
-
 def sqrt(n):
     """
     Calculate the floored square root of a number
@@ -14,16 +13,31 @@ def sqrt(n):
     Returns:
        int: Floored Square Root
     """
+    # square root of 0 is 0 and 1 is 1 so return the same
+    if n == 0 or n == 1:
+        return n
 
     # square root of a number is: a value that can be multiplied by itself to give the given number
-    square_root = 0
-    while (square_root * square_root) < n:
-        square_root += 1
+    # As sqrt(n) will be between [2, n/2] so do a simple binary search to find the solution
+    start = 1
+    end = n/2
+    ans = 2
+    while start <= end:
+        m = (start + end) // 2
+        if m * m == n:
+            return m
+        elif m * m < n:
+            # save last m for which (m*m) < n because in cases like 27 which are not perfect squares we need
+            # the lower bound which for 27 will be 5
+            ans = m
+            # sqrt(n) is probably greater than m so move to the right side
+            start = m + 1
+        else:  # m * m > n
+            # sqrt(n) is probably is smaller so move to the left side
+            end = m - 1
 
-    if (square_root * square_root) == n:
-        return square_root
-    else:
-        return square_root - 1
+    return ans
+
 
 
 def assert_(expected, actual):
